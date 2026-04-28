@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python *)",
+      "PowerShell(gh *)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "WebFetch(domain:sanches3d.github.io)",
+      "Bash(ffmpeg -version)",
+      "PowerShell(Get-Command *)",
+      "PowerShell(python -c \"import moviepy; print\\('moviepy ok'\\)\" 2>&1; python -c \"import PIL; print\\('PIL ok'\\)\" 2>&1)",
+      "PowerShell(python -c \"import cv2; print\\('cv2 ok'\\)\" 2>&1)",
+      "PowerShell(winget install *)"
+    ]
+  }
+}
