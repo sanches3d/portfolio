@@ -546,6 +546,46 @@
   .step-title { font-size: 15px; font-weight: 500; margin-bottom: 10px; }
   .step-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
 
+  /* Reviews */
+  .reviews { padding: 0 24px 120px; }
+  .reviews-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .review-card {
+    padding: 32px 28px;
+    border-radius: 24px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .review-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.14); }
+  .review-stars { display: flex; gap: 4px; }
+  .review-stars span { color: var(--gold); font-size: 16px; }
+  .review-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.6;
+    flex: 1;
+  }
+  .review-author { display: flex; flex-direction: column; gap: 3px; }
+  .review-name { font-size: 13px; font-weight: 500; }
+  .review-meta { font-size: 11px; color: var(--text-muted); letter-spacing: 0.05em; }
+  @media (max-width: 900px) { .reviews-grid { grid-template-columns: 1fr; } }
+  @media (min-width: 600px) and (max-width: 900px) { .reviews-grid { grid-template-columns: repeat(2, 1fr); } }
+
   /* Contact */
   .contact { padding: 0 24px 120px; }
   .contact-inner {
@@ -963,6 +1003,49 @@
       <div class="step-num">04</div>
       <div class="step-title">Livraison & Révisions</div>
       <p class="step-desc">Je livre en MP4/MOV 4K. On affine ensemble jusqu'à ce que le résultat soit parfait.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews -->
+<section class="reviews" id="avis">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">Avis clients</div>
+      <h2 class="section-title">Ils me font <em>confiance</em></h2>
+    </div>
+  </div>
+
+  <div class="reviews-grid">
+    <div class="review-card reveal">
+      <div class="review-stars">
+        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      </div>
+      <p class="review-text">« Rendu incroyable, exactement ce que je voulais. Livraison rapide et communication parfaite du début à la fin. »</p>
+      <div class="review-author">
+        <span class="review-name">Sophie M.</span>
+        <span class="review-meta">E-commerce · Fiverr</span>
+      </div>
+    </div>
+    <div class="review-card reveal reveal-delay-1">
+      <div class="review-stars">
+        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      </div>
+      <p class="review-text">« Animation d'un niveau professionnel, ma marque a vraiment été mise en valeur. Je recommande à 100 %. »</p>
+      <div class="review-author">
+        <span class="review-name">Karim B.</span>
+        <span class="review-meta">Cosmétiques · Fiverr</span>
+      </div>
+    </div>
+    <div class="review-card reveal reveal-delay-2">
+      <div class="review-stars">
+        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      </div>
+      <p class="review-text">« Résultat bluffant pour ma campagne publicitaire. Harry est très à l'écoute et force de proposition. »</p>
+      <div class="review-author">
+        <span class="review-name">Léa D.</span>
+        <span class="review-meta">Bien-être · Fiverr</span>
+      </div>
     </div>
   </div>
 </section>
