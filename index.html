@@ -804,7 +804,12 @@
       </div>
     </div>
     <div class="gallery-item reveal reveal-delay-2">
-      <img src="images/prime_full_lemon.png" alt="Prime Lemonade — Rendu Produit" style="width:100%;height:100%;object-fit:cover;display:block;">
+      <img id="prime-gif" src="images/prime_full_lemon.png" alt="Prime Lemonade — Rendu Produit" style="width:100%;height:100%;object-fit:cover;display:block;">
+      <div id="prime-play-btn" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;transition:opacity 0.3s ease;z-index:2;">
+        <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,0.4);display:flex;align-items:center;justify-content:center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
+        </div>
+      </div>
       <div class="gallery-overlay">
         <span class="gallery-overlay-title">Prime Lemonade — Packshot 3D</span>
         <span class="gallery-overlay-tag">ADS</span>
@@ -1094,6 +1099,12 @@
   const tubeItem = tubeGif.closest('.gallery-item');
   tubeItem.addEventListener('mouseenter', () => { tubeGif.src = 'images/cosmetic_tube.gif?' + Date.now(); tubePlayBtn.style.opacity = '0'; });
   tubeItem.addEventListener('mouseleave', () => { tubeGif.src = 'images/creme.png'; tubePlayBtn.style.opacity = '1'; });
+
+  const primeGif = document.getElementById('prime-gif');
+  const primePlayBtn = document.getElementById('prime-play-btn');
+  const primeItem = primeGif.closest('.gallery-item');
+  primeItem.addEventListener('mouseenter', () => { primeGif.src = 'images/prime_lemon.gif?' + Date.now(); primePlayBtn.style.opacity = '0'; });
+  primeItem.addEventListener('mouseleave', () => { primeGif.src = 'images/prime_full_lemon.png'; primePlayBtn.style.opacity = '1'; });
 
   // Lightbox
   const lightbox = document.createElement('div');
