@@ -17,7 +17,18 @@
       "Bash(ffprobe -v quiet -print_format json -show_streams \"d:/Portfolio/prime_2lemon0001-0030.mkv\")",
       "Bash(ffmpeg -i \"d:/Portfolio/prime_2lemon0001-0030.mkv\" -c:v libx264 -crf 18 -preset fast -pix_fmt yuv420p -an \"C:/Users/harry/OneDrive/Bureau/claude_code/portfolio/videos/prime_lemon.mp4\" -y)",
       "Bash(ffmpeg -i \"d:/Portfolio/prime_2lemon0001-0030.mkv\" -vf \"fps=24,scale=540:-2:flags=lanczos,palettegen=max_colors=256:stats_mode=diff\" \"C:/Users/harry/OneDrive/Bureau/claude_code/portfolio/images/prime_lemon_palette.png\" -y)",
-      "Bash(ffmpeg -i \"d:/Portfolio/prime_2lemon0001-0030.mkv\" -i \"C:/Users/harry/OneDrive/Bureau/claude_code/portfolio/images/prime_lemon_palette.png\" -lavfi \"fps=24,scale=540:-2:flags=lanczos[x];[x][1:v]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle\" \"C:/Users/harry/OneDrive/Bureau/claude_code/portfolio/images/prime_lemon.gif\" -y)"
+      "Bash(ffmpeg -i \"d:/Portfolio/prime_2lemon0001-0030.mkv\" -i \"C:/Users/harry/OneDrive/Bureau/claude_code/portfolio/images/prime_lemon_palette.png\" -lavfi \"fps=24,scale=540:-2:flags=lanczos[x];[x][1:v]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle\" \"C:/Users/harry/OneDrive/Bureau/claude_code/portfolio/images/prime_lemon.gif\" -y)",
+      "WebFetch(domain:razane-kraouti.pro)",
+      "mcp__Claude_in_Chrome__navigate",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "Bash(start chrome *)",
+      "PowerShell($response = Invoke-WebRequest -Uri \"https://razane-kraouti.pro/\" -UserAgent \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\" -UseBasicParsing; $response.Content | Select-String -Pattern \"\\(section|about|work|contact|hero|nav|footer\\)\" -AllMatches | Select-Object -First 60 | ForEach-Object { $_.Line.Trim\\(\\) })",
+      "PowerShell($response = Invoke-WebRequest -Uri \"https://razane-kraouti.pro/\" -UserAgent \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\" -UseBasicParsing; $response.Content.Length; $response.Content.Substring\\(0, 3000\\))",
+      "PowerShell($response = Invoke-WebRequest -Uri \"https://razane-kraouti.pro/\" -UserAgent \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\" -UseBasicParsing; $response.Content)",
+      "PowerShell(node -e \"require\\('puppeteer'\\)\" 2>&1)",
+      "PowerShell(npx --yes puppeteer --version 2>&1)",
+      "Bash(npx --yes puppeteer@latest node /tmp/screenshot.mjs)",
+      "Bash(cd \"C:/Users/harry/OneDrive/Bureau/claude_code/portfolio\" && rm -f razane_s*.png screenshot_razane.mjs screenshot_razane2.mjs && rm -rf node_modules package-lock.json)"
     ]
   }
 }
