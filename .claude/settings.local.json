@@ -28,7 +28,10 @@
       "PowerShell(node -e \"require\\('puppeteer'\\)\" 2>&1)",
       "PowerShell(npx --yes puppeteer --version 2>&1)",
       "Bash(npx --yes puppeteer@latest node /tmp/screenshot.mjs)",
-      "Bash(cd \"C:/Users/harry/OneDrive/Bureau/claude_code/portfolio\" && rm -f razane_s*.png screenshot_razane.mjs screenshot_razane2.mjs && rm -rf node_modules package-lock.json)"
+      "Bash(cd \"C:/Users/harry/OneDrive/Bureau/claude_code/portfolio\" && rm -f razane_s*.png screenshot_razane.mjs screenshot_razane2.mjs && rm -rf node_modules package-lock.json)",
+      "Bash(gh api *)",
+      "PowerShell($r = Invoke-WebRequest -Uri \"https://sanches3d.github.io/portfolio/\" -UseBasicParsing; $r.StatusCode; \\($r.Content | Select-String \"Harry Gomes\" | Select-Object -First 1\\).Line.Trim\\(\\).Substring\\(0, [Math]::Min\\(100, \\($r.Content | Select-String \"Harry Gomes\" | Select-Object -First 1\\).Line.Trim\\(\\).Length\\)\\))",
+      "PowerShell($r = Invoke-WebRequest -Uri \"https://sanches3d.github.io/portfolio/\" -UseBasicParsing; \\($r.Content | Select-String \"nav a|hero-bottom|Let.s|filter-tab|about-skill\" | Select-Object -First 5\\) | ForEach-Object { $_.Line.Trim\\(\\).Substring\\(0, [Math]::Min\\(80, $_.Line.Trim\\(\\).Length\\)\\) })"
     ]
   }
 }
