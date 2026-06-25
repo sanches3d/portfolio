@@ -13,7 +13,11 @@
       "PowerShell(Get-Command *)",
       "PowerShell(python -c \"import moviepy; print\\('moviepy ok'\\)\" 2>&1; python -c \"import PIL; print\\('PIL ok'\\)\" 2>&1)",
       "PowerShell(python -c \"import cv2; print\\('cv2 ok'\\)\" 2>&1)",
-      "PowerShell(winget install *)"
+      "PowerShell(winget install *)",
+      "Bash(ffprobe -v quiet -print_format json -show_streams \"d:/Portfolio/prime_2lemon0001-0030.mkv\")",
+      "Bash(ffmpeg -i \"d:/Portfolio/prime_2lemon0001-0030.mkv\" -c:v libx264 -crf 18 -preset fast -pix_fmt yuv420p -an \"C:/Users/harry/OneDrive/Bureau/claude_code/portfolio/videos/prime_lemon.mp4\" -y)",
+      "Bash(ffmpeg -i \"d:/Portfolio/prime_2lemon0001-0030.mkv\" -vf \"fps=24,scale=540:-2:flags=lanczos,palettegen=max_colors=256:stats_mode=diff\" \"C:/Users/harry/OneDrive/Bureau/claude_code/portfolio/images/prime_lemon_palette.png\" -y)",
+      "Bash(ffmpeg -i \"d:/Portfolio/prime_2lemon0001-0030.mkv\" -i \"C:/Users/harry/OneDrive/Bureau/claude_code/portfolio/images/prime_lemon_palette.png\" -lavfi \"fps=24,scale=540:-2:flags=lanczos[x];[x][1:v]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle\" \"C:/Users/harry/OneDrive/Bureau/claude_code/portfolio/images/prime_lemon.gif\" -y)"
     ]
   }
 }
