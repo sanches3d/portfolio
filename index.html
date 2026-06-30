@@ -169,21 +169,31 @@
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
   .hero-scroll {
-    display: flex; flex-direction: column; align-items: center; gap: 10px;
-    margin-bottom: 4px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    margin-bottom: 4px; cursor: default;
   }
   .hero-scroll span {
-    font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
-    color: var(--text-dim); writing-mode: vertical-rl;
+    font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(240,238,248,0.35);
   }
-  .hero-scroll-line {
-    width: 1px; height: 48px;
-    background: linear-gradient(to bottom, var(--text-dim), transparent);
-    animation: scrollLine 2.2s ease infinite;
+  .scroll-mouse {
+    width: 22px; height: 36px;
   }
-
+  .scroll-mouse-body {
+    fill: none; stroke: rgba(240,238,248,0.4); stroke-width: 1.5;
+  }
+  .scroll-mouse-dot {
+    fill: rgba(240,238,248,0.7);
+    animation: scrollDot 2s ease-in-out infinite;
+    transform-origin: 11px 10px;
+  }
   @keyframes heroIn { from { opacity:0; transform:translateY(40px); } to { opacity:1; transform:translateY(0); } }
-  @keyframes scrollLine { 0%,100%{ opacity:0; transform:scaleY(0); transform-origin:top } 50%{ opacity:1; transform:scaleY(1) } }
+  @keyframes scrollDot {
+    0%   { transform: translateY(0);    opacity: 1; }
+    65%  { transform: translateY(11px); opacity: 0; }
+    66%  { transform: translateY(0);    opacity: 0; }
+    100% { transform: translateY(0);    opacity: 1; }
+  }
 
   /* ── Shared section labels & titles ── */
   .section-label {
@@ -503,8 +513,11 @@
       <h1>Harry<br><em>Gomes</em></h1>
     </div>
     <div class="hero-scroll">
+      <svg class="scroll-mouse" viewBox="0 0 22 36" xmlns="http://www.w3.org/2000/svg">
+        <rect class="scroll-mouse-body" x="1" y="1" width="20" height="34" rx="10"/>
+        <circle class="scroll-mouse-dot" cx="11" cy="10" r="2.5"/>
+      </svg>
       <span>Scroll</span>
-      <div class="hero-scroll-line"></div>
     </div>
   </div>
 </section>
