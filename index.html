@@ -300,18 +300,38 @@
     line-height: 1.1; letter-spacing: -0.02em;
   }
   .toolkit-title em { font-style: italic; color: var(--accent); }
-  .toolkit-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
-  .tool-item {
-    display: flex; flex-direction: column; align-items: center; gap: 10px;
-    padding: 24px 12px;
-    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 16px; transition: background 0.25s ease, border-color 0.25s ease;
-    cursor: default;
+  /* Constellation */
+  .constellation-wrap { position: relative; width: 100%; height: 440px; }
+  .constellation-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .constellation-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+  .constellation-svg line { stroke: rgba(255,255,255,0.14); stroke-width: 1px; transition: stroke 0.3s; }
+  .tool-star {
+    position: absolute; transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    cursor: default; z-index: 2;
   }
-  .tool-item:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
-  .tool-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-  .tool-icon img { width: 36px; height: 36px; object-fit: contain; filter: brightness(0) invert(1); }
-  .tool-name { font-size: 11px; color: var(--text-muted); text-align: center; letter-spacing: 0.03em; }
+  @keyframes star-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+    50% { box-shadow: 0 0 10px 3px rgba(255,255,255,0.07); }
+  }
+  .star-node {
+    width: 54px; height: 54px; border-radius: 50%;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.18);
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    animation: star-pulse 5s ease-in-out infinite;
+  }
+  .tool-star:hover .star-node {
+    background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.4);
+    box-shadow: 0 0 24px rgba(255,255,255,0.18);
+  }
+  .star-node img { width: 28px; height: 28px; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.75; transition: opacity 0.3s; }
+  .tool-star:hover .star-node img { opacity: 1; }
+  .star-label {
+    font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(255,255,255,0.35); white-space: nowrap; transition: color 0.3s;
+  }
+  .tool-star:hover .star-label { color: rgba(255,255,255,0.8); }
 
   /* ── Contact ── */
   .contact { padding: 120px 52px; border-top: 1px solid rgba(255,255,255,0.05); }
@@ -421,7 +441,7 @@
   .reveal-delay-3 { transition-delay: 0.3s; }
 
   /* ── Responsive ── */
-  @media (max-width: 1024px) { .toolkit-grid { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 1024px) { .constellation-wrap { height: 400px; } }
   @media (max-width: 900px) {
     .hero { padding: 28px 28px 44px; }
     .work, .about, .contact { padding-left: 28px; padding-right: 28px; }
@@ -431,12 +451,12 @@
     .gallery-grid { grid-template-columns: repeat(2, 1fr); }
     .about-body { grid-template-columns: 1fr; gap: 40px; }
     .contact-inner { grid-template-columns: 1fr; gap: 48px; }
-    .toolkit-grid { grid-template-columns: repeat(3, 1fr); }
+    .constellation-wrap { height: 380px; }
   }
   @media (max-width: 600px) {
     .hero h1 { font-size: clamp(56px, 15vw, 80px); }
     .gallery-grid { grid-template-columns: 1fr; }
-    .toolkit-grid { grid-template-columns: repeat(2, 1fr); }
+    .constellation-wrap { height: 340px; }
     footer { padding: 40px 24px; }
     .status-group { flex-direction: column; }
   }
@@ -646,13 +666,41 @@
       <div class="section-label">Outils</div>
       <h3 class="toolkit-title">Une constellation d'<em>outils</em></h3>
     </div>
-    <div class="toolkit-grid">
-      <div class="tool-item"><div class="tool-icon"><img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/blender.svg" alt="Blender"></div><div class="tool-name">Blender</div></div>
-      <div class="tool-item"><div class="tool-icon"><img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/cinema4d.svg" alt="Cinema 4D"></div><div class="tool-name">Cinema 4D</div></div>
-      <div class="tool-item"><div class="tool-icon"><img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/adobeaftereffects.svg" alt="After Effects"></div><div class="tool-name">After Effects</div></div>
-      <div class="tool-item"><div class="tool-icon"><img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/unrealengine.svg" alt="Unreal Engine"></div><div class="tool-name">Unreal Engine</div></div>
-      <div class="tool-item"><div class="tool-icon"><img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/adobephotoshop.svg" alt="Photoshop"></div><div class="tool-name">Photoshop</div></div>
-      <div class="tool-item"><div class="tool-icon"><img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/adobepremierepro.svg" alt="Premiere Pro"></div><div class="tool-name">Premiere Pro</div></div>
+    <div class="constellation-wrap">
+      <canvas class="constellation-canvas" id="constellation-canvas"></canvas>
+      <svg class="constellation-svg" xmlns="http://www.w3.org/2000/svg">
+        <line x1="20%" y1="16%" x2="74%" y2="12%"/>
+        <line x1="20%" y1="16%" x2="48%" y2="46%"/>
+        <line x1="74%" y1="12%" x2="48%" y2="46%"/>
+        <line x1="48%" y1="46%" x2="20%" y2="70%"/>
+        <line x1="48%" y1="46%" x2="80%" y2="64%"/>
+        <line x1="20%" y1="70%" x2="58%" y2="84%"/>
+        <line x1="80%" y1="64%" x2="58%" y2="84%"/>
+      </svg>
+      <div class="tool-star" style="left:20%;top:16%">
+        <div class="star-node" style="animation-delay:0s"><img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/blender.svg" alt="Blender"></div>
+        <div class="star-label">Blender</div>
+      </div>
+      <div class="tool-star" style="left:74%;top:12%">
+        <div class="star-node" style="animation-delay:0.9s"><img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/cinema4d.svg" alt="Cinema 4D"></div>
+        <div class="star-label">Cinema 4D</div>
+      </div>
+      <div class="tool-star" style="left:48%;top:46%">
+        <div class="star-node" style="animation-delay:1.8s"><img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/adobeaftereffects.svg" alt="After Effects"></div>
+        <div class="star-label">After Effects</div>
+      </div>
+      <div class="tool-star" style="left:80%;top:64%">
+        <div class="star-node" style="animation-delay:2.7s"><img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/unrealengine.svg" alt="Unreal Engine"></div>
+        <div class="star-label">Unreal Engine</div>
+      </div>
+      <div class="tool-star" style="left:20%;top:70%">
+        <div class="star-node" style="animation-delay:3.6s"><img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/adobephotoshop.svg" alt="Photoshop"></div>
+        <div class="star-label">Photoshop</div>
+      </div>
+      <div class="tool-star" style="left:58%;top:84%">
+        <div class="star-node" style="animation-delay:4.5s"><img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/adobepremierepro.svg" alt="Premiere Pro"></div>
+        <div class="star-label">Premiere Pro</div>
+      </div>
     </div>
   </div>
 </section>
@@ -770,7 +818,7 @@
     requestAnimationFrame(animateRing);
   })();
 
-  document.querySelectorAll('a, button, .gallery-item, .about-skill, .tool-item, .status-option').forEach(el => {
+  document.querySelectorAll('a, button, .gallery-item, .about-skill, .tool-star, .status-option').forEach(el => {
     el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
     el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
   });
@@ -882,6 +930,31 @@
       else if (img) openLightbox(img);
     });
   });
+
+  // ── Constellation background micro-stars ──
+  (function() {
+    const canvas = document.getElementById('constellation-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const stars = Array.from({length: 60}, () => ({
+      x: Math.random(), y: Math.random(),
+      r: Math.random() * 1.1 + 0.2,
+      a: Math.random() * 0.3 + 0.05,
+    }));
+    function draw() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach(s => {
+        ctx.beginPath();
+        ctx.arc(s.x * canvas.width, s.y * canvas.height, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${s.a})`;
+        ctx.fill();
+      });
+    }
+    draw();
+    window.addEventListener('resize', draw);
+  })();
 </script>
 </body>
 </html>
