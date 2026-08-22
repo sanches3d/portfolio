@@ -624,6 +624,21 @@
       </div>
     </div>
 
+    <div class="gallery-item reveal" data-category="motion">
+      <video id="gopro-video" muted loop playsinline>
+        <source src="videos/gopro_final.mp4" type="video/mp4">
+      </video>
+      <div id="gopro-play-btn" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;transition:opacity 0.3s ease;z-index:2;">
+        <div style="width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,0.4);display:flex;align-items:center;justify-content:center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
+        </div>
+      </div>
+      <div class="gallery-overlay">
+        <span class="gallery-overlay-title">GoPro — Animation Produit</span>
+        <span class="gallery-overlay-tag">Motion</span>
+      </div>
+    </div>
+
     <div class="gallery-item reveal reveal-delay-2" data-category="motion">
       <video id="natara-video" muted loop playsinline>
         <source src="videos/colle_natara.mp4" type="video/mp4">
@@ -895,6 +910,7 @@
     ['icebump-video', 'icebump-play-btn'],
     ['iphone17-video', 'iphone17-play-btn'],
     ['carte-video', 'carte-play-btn'],
+    ['gopro-video', 'gopro-play-btn'],
   ].forEach(([vid, btn]) => {
     const video = document.getElementById(vid);
     const playBtn = document.getElementById(btn);
