@@ -916,7 +916,7 @@
     const playBtn = document.getElementById(btn);
     const item = video.closest('.gallery-item');
     item.addEventListener('mouseenter', () => { video.play(); playBtn.style.opacity = '0'; });
-    item.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; playBtn.style.opacity = '1'; });
+    item.addEventListener('mouseleave', () => { video.pause(); if (video.poster) { video.load(); } else { video.currentTime = 0; } playBtn.style.opacity = '1'; });
   });
 
   const tubeGif = document.getElementById('tube-gif');
