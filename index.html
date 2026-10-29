@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  // Active les animations de scroll avant le premier rendu (évite un flash), sauf si l'utilisateur réduit les animations
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('motion');
+</script>
 <title>Harry Gomes — 3D Artist & Animator</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 <style>
@@ -461,11 +465,51 @@
   .footer-copy { font-size: 11px; color: var(--text-dim); letter-spacing: 0.05em; text-transform: uppercase; }
 
   /* ── Animations ── */
-  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s ease; }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-  .reveal-delay-1 { transition-delay: 0.1s; }
-  .reveal-delay-2 { transition-delay: 0.2s; }
-  .reveal-delay-3 { transition-delay: 0.3s; }
+  /* ── Scroll animations (actives seulement avec html.motion) ──
+     Animations CSS avec fill "backwards" : une fois terminées, elles ne figent rien,
+     donc les transitions de hover des éléments restent intactes. */
+  :root { --ease-out: cubic-bezier(0.16, 1, 0.3, 1); }
+
+  @keyframes rise      { from { opacity: 0; transform: translateY(48px); } }
+  @keyframes riseSmall { from { opacity: 0; transform: translateY(22px); } }
+  @keyframes wordUp    { from { transform: translateY(115%); } }
+  @keyframes clipUp    { from { clip-path: inset(100% 0 0 0 round 18px); } to { clip-path: inset(0 0 0 0 round 18px); } }
+  @keyframes mediaZoom { from { transform: scale(1.3); } }
+  @keyframes starPop   { from { opacity: 0; transform: translate(-50%, -50%) scale(0.3); } }
+  @keyframes fadeIn    { from { opacity: 0; } }
+
+  /* Blocs génériques */
+  html.motion .reveal:not(.visible) { opacity: 0; }
+  html.motion .reveal.visible { animation: rise 1.1s var(--ease-out) var(--d, 0s) backwards; }
+
+  /* Galerie : dévoilement par masque + dézoom du média */
+  html.motion .gallery-item.reveal.visible { animation: clipUp 1.3s var(--ease-out) var(--d, 0s) backwards; }
+  html.motion .gallery-item.reveal.visible img,
+  html.motion .gallery-item.reveal.visible video { animation: mediaZoom 1.8s var(--ease-out) var(--d, 0s) backwards; }
+
+  /* Titres : chaque mot sort d'un masque */
+  .w { display: inline-block; overflow: hidden; vertical-align: top; padding: 0.12em 0.08em 0.18em; margin: -0.12em -0.08em -0.18em; }
+  .w > span { display: inline-block; }
+  html.motion .split:not(.in) .w > span { transform: translateY(115%); }
+  html.motion .split.in .w > span { animation: wordUp 1.15s var(--ease-out) calc(var(--wi) * 70ms) backwards; }
+  /* Le dégradé de "create." est porté par le mot lui-même une fois découpé (sinon background-clip casse) */
+  .contact-left-title.split em { background: none; }
+  .contact-left-title.split em .w > span {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+
+  /* Listes en cascade */
+  html.motion .stagger:not(.visible) > * { opacity: 0; }
+  html.motion .stagger.visible > * { animation: riseSmall 0.9s var(--ease-out) calc(var(--i) * 85ms + var(--d, 0s)) backwards; }
+  html.motion .stagger.visible > .form-status.visible { animation: statusIn 0.45s ease both; }
+
+  /* Constellation : fond, tracé des lignes (JS), puis étoiles une à une */
+  html.motion .constellation-wrap:not(.in) .constellation-canvas,
+  html.motion .constellation-wrap:not(.in) .constellation-svg,
+  html.motion .constellation-wrap:not(.in) .tool-star { opacity: 0; }
+  html.motion .constellation-wrap.in .constellation-canvas { animation: fadeIn 2.4s ease backwards; }
+  html.motion .constellation-wrap.in .tool-star { animation: starPop 1s var(--ease-out) calc(var(--si) * 160ms + 250ms) backwards; }
 
   /* ── Responsive ── */
   @media (max-width: 1024px) { .constellation-wrap { height: 400px; } }
@@ -574,7 +618,7 @@
       </div>
     </div>
 
-    <div class="gallery-item reveal reveal-delay-1" data-category="ads">
+    <div class="gallery-item reveal" data-category="ads">
       <img src="images/canette_portfolio.png" alt="Sahry Energy Drink">
       <div class="gallery-overlay">
         <span class="gallery-overlay-title">Sahry Energy Drink — Packshot 3D</span>
@@ -582,7 +626,7 @@
       </div>
     </div>
 
-    <div class="gallery-item reveal reveal-delay-2" data-category="ads">
+    <div class="gallery-item reveal" data-category="ads">
       <img id="prime-gif" src="images/prime_full_lemon.png" alt="Prime Lemonade">
       <div id="prime-play-btn" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;transition:opacity 0.3s ease;z-index:2;">
         <div style="width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,0.4);display:flex;align-items:center;justify-content:center;">
@@ -610,7 +654,7 @@
       </div>
     </div>
 
-    <div class="gallery-item reveal reveal-delay-1" data-category="motion">
+    <div class="gallery-item reveal" data-category="motion">
       <video id="iphone17-video" muted loop playsinline>
         <source src="videos/iphone17_final.mp4" type="video/mp4">
       </video>
@@ -625,7 +669,7 @@
       </div>
     </div>
 
-    <div class="gallery-item reveal reveal-delay-2" data-category="motion">
+    <div class="gallery-item reveal" data-category="motion">
       <video id="carte-video" muted loop playsinline>
         <source src="videos/carte_de_credit_final.mp4" type="video/mp4">
       </video>
@@ -655,7 +699,7 @@
       </div>
     </div>
 
-    <div class="gallery-item reveal reveal-delay-1" data-category="motion">
+    <div class="gallery-item reveal" data-category="motion">
       <video id="rimowa-video" muted loop playsinline>
         <source src="videos/rimowa_suitcase.mp4" type="video/mp4">
       </video>
@@ -670,7 +714,7 @@
       </div>
     </div>
 
-    <div class="gallery-item reveal reveal-delay-2" data-category="motion">
+    <div class="gallery-item reveal" data-category="motion">
       <video id="natara-video" muted loop playsinline>
         <source src="videos/colle_natara.mp4" type="video/mp4">
       </video>
@@ -685,7 +729,7 @@
       </div>
     </div>
 
-    <div class="gallery-item reveal reveal-delay-2" data-category="beauté">
+    <div class="gallery-item reveal" data-category="beauté">
       <img src="images/ritual_glowy.png" alt="Ritual Glow Mist">
       <div class="gallery-overlay">
         <span class="gallery-overlay-title">Ritual — Shimmering Glow Mist</span>
@@ -706,7 +750,7 @@
       </div>
     </div>
 
-    <div class="gallery-item reveal reveal-delay-1" data-category="beauté">
+    <div class="gallery-item reveal" data-category="beauté">
       <img src="images/fond_de_teint.png" alt="Fond de Teint Packshot 3D">
       <div class="gallery-overlay">
         <span class="gallery-overlay-title">Fond de Teint — Packshot 3D</span>
@@ -728,7 +772,7 @@
       <p class="about-location">Basé en France, je travaille avec des marques du monde entier.</p>
       <p class="about-bio">Mon terrain de jeu, c'est la lumière, la matière et le silence entre les objets. Je crée des visuels 3D qui ralentissent le regard — précis, sensoriels, faits pour marquer.<br><br>Chaque projet est une collaboration : vous apportez la vision, j'apporte la technique pour la rendre inoubliable.</p>
     </div>
-    <div class="about-skills reveal reveal-delay-1">
+    <div class="about-skills stagger">
       <div class="about-skill"><div class="skill-dot"></div>Packshot 3D & Rendu Produit</div>
       <div class="about-skill"><div class="skill-dot"></div>Animation Cinématique</div>
       <div class="about-skill"><div class="skill-dot"></div>Motion Design & Post-Production</div>
@@ -787,7 +831,7 @@
       <div class="section-label">Contact</div>
       <h2 class="contact-left-title">Let's<br><em>create.</em></h2>
       <p class="contact-sub">Un projet, une collaboration ? Demandez un devis — je réponds sous 24-48h.</p>
-      <div class="contact-links">
+      <div class="contact-links stagger">
         <a href="https://www.instagram.com/sanches_3d/" target="_blank" class="contact-link">
           <div class="contact-link-icon"><img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/instagram.svg" alt="Instagram"></div>
           <div>
@@ -812,7 +856,7 @@
       </div>
     </div>
 
-    <form id="devis-form" class="contact-form reveal reveal-delay-1" action="https://formspree.io/f/mbdqnjbr" method="POST">
+    <form id="devis-form" class="contact-form stagger" action="https://formspree.io/f/mbdqnjbr" method="POST">
       <div class="form-group">
         <label>Nom complet</label>
         <input type="text" name="nom" placeholder="Jean Dupont" required>
@@ -864,7 +908,7 @@
 </section>
 
 <!-- ── FOOTER ── -->
-<footer>
+<footer class="stagger">
   <div class="footer-logo">Harry <em>Gomes</em></div>
   <div class="footer-links">
     <a href="https://www.instagram.com/sanches_3d/" target="_blank">Instagram</a>
@@ -899,11 +943,79 @@
     el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
   });
 
-  // ── Scroll reveal ──
-  const revealObserver = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  // ── Scroll animations ──
+  (function() {
+    if (!document.documentElement.classList.contains('motion')) return;
+
+    // Découpe un titre en mots masqués (conserve <em> et <br>)
+    function splitWords(el) {
+      (function walk(node) {
+        [...node.childNodes].forEach(child => {
+          if (child.nodeType === 3) {
+            const frag = document.createDocumentFragment();
+            child.textContent.split(/(\s+)/).forEach(part => {
+              if (!part) return;
+              if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+              const outer = document.createElement('span');
+              const inner = document.createElement('span');
+              outer.className = 'w';
+              inner.textContent = part;
+              outer.appendChild(inner);
+              frag.appendChild(outer);
+            });
+            child.replaceWith(frag);
+          } else if (child.nodeType === 1 && child.tagName !== 'BR') {
+            walk(child);
+          }
+        });
+      })(el);
+      el.querySelectorAll('.w > span').forEach((s, i) => s.style.setProperty('--wi', i));
+      el.classList.add('split');
+    }
+
+    document.querySelectorAll('.section-title, .about-intro-title, .toolkit-title, .contact-left-title').forEach(splitWords);
+    document.querySelectorAll('.stagger').forEach(p => [...p.children].forEach((c, i) => c.style.setProperty('--i', i)));
+    document.querySelectorAll('.constellation-wrap .tool-star').forEach((s, i) => s.style.setProperty('--si', i));
+
+    function drawConstellation(wrap) {
+      wrap.querySelectorAll('.constellation-svg line').forEach((line, i) => {
+        const len = line.getTotalLength();
+        line.style.strokeDasharray = len;
+        line.animate(
+          [{ strokeDashoffset: len }, { strokeDashoffset: 0 }],
+          { duration: 1300, delay: 150 + i * 150, easing: 'cubic-bezier(0.65, 0, 0.35, 1)', fill: 'backwards' }
+        ).onfinish = () => { line.style.strokeDasharray = ''; };
+      });
+    }
+
+    // Les éléments qui entrent ensemble dans l'écran apparaissent en cascade, dans l'ordre de lecture.
+    // Des lots qui arrivent rapprochés (saut via le menu) prolongent la même cascade au lieu de repartir de zéro.
+    let seq = 0, lastBatch = 0;
+    const io = new IntersectionObserver(entries => {
+      const now = performance.now();
+      if (now - lastBatch > 300) seq = 0;
+      lastBatch = now;
+      entries
+        .filter(e => e.isIntersecting)
+        .map(e => e.target)
+        .sort((a, b) => {
+          const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+          return (Math.round(ra.top) - Math.round(rb.top)) || (ra.left - rb.left);
+        })
+        .forEach(el => {
+          io.unobserve(el);
+          if (el.matches('.split, .constellation-wrap')) {
+            el.classList.add('in');
+            if (el.matches('.constellation-wrap')) drawConstellation(el);
+            return;
+          }
+          el.style.setProperty('--d', (Math.min(seq++, 8) * 0.11) + 's');
+          el.classList.add('visible');
+        });
+    }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+
+    document.querySelectorAll('.reveal, .stagger, .split, .constellation-wrap').forEach(el => io.observe(el));
+  })();
 
   // ── Active nav ──
   const navLinks = document.querySelectorAll('nav a');
@@ -928,9 +1040,18 @@
       document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       const filter = tab.dataset.filter;
+      let shown = 0;
       document.querySelectorAll('.gallery-item').forEach(item => {
         const show = filter === 'all' || item.dataset.category === filter;
         item.classList.toggle('hidden', !show);
+        // Rejoue l'apparition en cascade pour les cartes déjà révélées
+        if (show && item.classList.contains('visible')) {
+          item.classList.remove('visible');
+          void item.offsetWidth;
+          item.style.setProperty('--d', (shown * 0.07) + 's');
+          item.classList.add('visible');
+        }
+        if (show) shown++;
       });
     });
   });
