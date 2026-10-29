@@ -1,0 +1,3 @@
+# Réglages locaux de Claude Code : propres à ce PC, ne doivent pas être publiés
+.claude/settings.local.json
+.claude/launch.json
