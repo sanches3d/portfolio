@@ -991,6 +991,13 @@
       });
     }
 
+    function resetConstellation(wrap) {
+      wrap.querySelectorAll('.constellation-svg line').forEach(line => {
+        line.getAnimations().forEach(a => a.cancel());
+        line.style.strokeDasharray = '';
+      });
+    }
+
     // Les éléments qui entrent ensemble dans l'écran apparaissent en cascade, dans l'ordre de lecture.
     // Des lots qui arrivent rapprochés (saut via le menu) prolongent la même cascade au lieu de repartir de zéro.
     let seq = 0, lastBatch = 0;
@@ -1006,18 +1013,33 @@
           return (Math.round(ra.top) - Math.round(rb.top)) || (ra.left - rb.left);
         })
         .forEach(el => {
-          io.unobserve(el);
           if (el.matches('.split, .constellation-wrap')) {
+            if (el.classList.contains('in')) return;
             el.classList.add('in');
             if (el.matches('.constellation-wrap')) drawConstellation(el);
             return;
           }
+          if (el.classList.contains('visible')) return;
           el.style.setProperty('--d', (Math.min(seq++, 8) * 0.11) + 's');
           el.classList.add('visible');
         });
     }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
 
-    document.querySelectorAll('.reveal, .stagger, .split, .constellation-wrap').forEach(el => io.observe(el));
+    // Un élément complètement sorti de l'écran (en haut ou en bas) revient à son état de départ,
+    // pour rejouer son animation à chaque fois qu'il réapparaît
+    const resetIo = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) return;
+        const el = e.target;
+        el.classList.remove('visible', 'in');
+        if (el.matches('.constellation-wrap')) resetConstellation(el);
+      });
+    }, { threshold: 0 });
+
+    document.querySelectorAll('.reveal, .stagger, .split, .constellation-wrap').forEach(el => {
+      io.observe(el);
+      resetIo.observe(el);
+    });
   })();
 
   // ── Active nav ──
