@@ -592,7 +592,7 @@
       <p class="work-desc">Chaque projet est conçu pour capturer l'attention — lumière, matière et mouvement au service de votre produit.</p>
     </div>
     <div class="work-meta">
-      <div class="work-count">8 Projets</div>
+      <div class="work-count" id="work-count">12 Projets</div>
       <div class="filter-tabs">
         <button class="filter-tab active" data-filter="all">Tout</button>
         <button class="filter-tab" data-filter="motion">Motion</button>
@@ -942,6 +942,9 @@
     el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
     el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
   });
+
+  // ── Nombre de projets (suit automatiquement la galerie) ──
+  document.getElementById('work-count').textContent = document.querySelectorAll('.gallery-item').length + ' Projets';
 
   // ── Scroll animations ──
   (function() {
