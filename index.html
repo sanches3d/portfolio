@@ -482,8 +482,13 @@
   html.motion .reveal:not(.visible) { opacity: 0; }
   html.motion .reveal.visible { animation: rise 1.1s var(--ease-out) var(--d, 0s) backwards; }
 
-  /* Galerie : dévoilement par masque + dézoom du média */
-  html.motion .gallery-item.reveal.visible { animation: clipUp 1.3s var(--ease-out) var(--d, 0s) backwards; }
+  /* Galerie : dévoilement par masque + dézoom du média.
+     Le masque est posé sur .gallery-inner (créé en JS), jamais sur la carte observée :
+     l'IntersectionObserver tient compte du clip-path, et masquer la carte elle-même
+     la ferait passer pour "hors écran" → boucle visible/invisible (clignotement). */
+  .gallery-inner { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; }
+  html.motion .gallery-item.reveal.visible { animation: none; }
+  html.motion .gallery-item.reveal.visible > .gallery-inner { animation: clipUp 1.3s var(--ease-out) var(--d, 0s) backwards; }
   html.motion .gallery-item.reveal.visible img,
   html.motion .gallery-item.reveal.visible video { animation: mediaZoom 1.8s var(--ease-out) var(--d, 0s) backwards; }
 
@@ -976,6 +981,14 @@
       el.classList.add('split');
     }
 
+    // Enveloppe interne qui porte le masque de chaque carte (voir CSS .gallery-inner)
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      const inner = document.createElement('div');
+      inner.className = 'gallery-inner';
+      while (item.firstChild) inner.appendChild(item.firstChild);
+      item.appendChild(inner);
+    });
+
     document.querySelectorAll('.section-title, .about-intro-title, .toolkit-title, .contact-left-title').forEach(splitWords);
     document.querySelectorAll('.stagger').forEach(p => [...p.children].forEach((c, i) => c.style.setProperty('--i', i)));
     document.querySelectorAll('.constellation-wrap .tool-star').forEach((s, i) => s.style.setProperty('--si', i));
@@ -1026,7 +1039,8 @@
     }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
 
     // Un élément complètement sorti de l'écran (en haut ou en bas) revient à son état de départ,
-    // pour rejouer son animation à chaque fois qu'il réapparaît
+    // pour rejouer son animation à chaque fois qu'il réapparaît. La marge de 120px évite que le
+    // décalage de départ d'une animation (translateY) ne le fasse passer pour sorti.
     const resetIo = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) return;
@@ -1034,7 +1048,7 @@
         el.classList.remove('visible', 'in');
         if (el.matches('.constellation-wrap')) resetConstellation(el);
       });
-    }, { threshold: 0 });
+    }, { threshold: 0, rootMargin: '120px 0px 120px 0px' });
 
     document.querySelectorAll('.reveal, .stagger, .split, .constellation-wrap').forEach(el => {
       io.observe(el);
